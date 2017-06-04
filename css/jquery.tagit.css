@@ -26,10 +26,10 @@ input.tagit-hidden-field {
 
 .tagit .tagit-new {
 	padding:0.25em 4px 0.25em 0;
+	cursor:default;
 }
 
 .tagit .tagit-choice a.tagit-label {
-	cursor:pointer;
 	text-decoration:none;
 }
 
