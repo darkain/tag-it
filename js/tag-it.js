@@ -32,31 +32,31 @@
 
 
 		options: {
-			allowDuplicates:            false,
-			caseSensitive:              true,
-			fieldName:                  'tags',
-			placeholderText:            null,   // Sets `placeholder` attr on input field.
-			readOnly:                   false,  // Disables editing.
-			removeConfirmation:         false,  // Require confirmation to remove tags.
-			tagLimit:                   null,   // Max number of tags allowed (null for unlimited).
+			allowDuplicates:			false,
+			caseSensitive:				true,
+			fieldName:					'tags',
+			placeholderText:			null,   // Sets `placeholder` attr on input field.
+			readOnly:					false,  // Disables editing.
+			removeConfirmation:			false,  // Require confirmation to remove tags.
+			tagLimit:					null,   // Max number of tags allowed (null for unlimited).
 
-			parentSelector:             'ul,ol',
-			childSelector:              'li',
+			parentSelector:				'ul,ol',
+			childSelector:				'li',
 
 			// Used for autocomplete, unless you override `autocomplete.source`.
-			availableTags:              [],
+			availableTags:				[],
 
 			// Use to override or add any options to the autocomplete widget.
 			//
 			// By default, autocomplete.source will map to availableTags,
 			// unless overridden.
-			autocomplete:               {},
+			autocomplete:				{},
 
 			// Shows autocomplete before the user even types anything.
-			showAutocompleteOnFocus:    false,
+			showAutocompleteOnFocus:	false,
 
 			// When enabled, quotes are unneccesary for inputting multi-word tags.
-			allowSpaces:                false,
+			allowSpaces:				false,
 
 			// The below options are for using a single field instead of several
 			// for our form values.
@@ -69,11 +69,11 @@
 			// on an INPUT element, in which case singleField is automatically
 			// set to true, and singleFieldNode is set to that element. This
 			// way, you don't need to fiddle with these options.
-			singleField:                false,
+			singleField:				false,
 
 			// This is just used when preloading data from the field, and for
 			// populating the field with delimited tags as the user adds them.
-			singleFieldDelimiter:       ',',
+			singleFieldDelimiter:		',',
 
 			// Set this to an input DOM node to use an existing form field.
 			// Any text in it will be erased on init. But it will be
@@ -82,24 +82,24 @@
 			//
 			// If this is not set, we create an input node for it,
 			// with the name given in settings.fieldName.
-			singleFieldNode:            null,
+			singleFieldNode:			null,
 
 			// Whether to animate tag removals or not.
-			animate:                    true,
+			animate:					true,
 
 			// Optionally set a tabindex attribute on the input that gets
 			// created for tag-it.
-			tabIndex:                   null,
+			tabIndex:					null,
 
 			// Event callbacks.
-			beforeTagAdded:             null,
-			afterTagAdded:              null,
+			beforeTagAdded:				null,
+			afterTagAdded:				null,
 
-			beforeTagRemoved:           null,
-			afterTagRemoved:            null,
+			beforeTagRemoved:			null,
+			afterTagRemoved:			null,
 
-			onTagClicked:               null,
-			onTagLimitExceeded:         null,
+			onTagClicked:				null,
+			onTagLimitExceeded:			null,
 
 
 			// DEPRECATED:
@@ -107,10 +107,10 @@
 			// /!\ These event callbacks are deprecated and WILL BE REMOVED at some
 			// point in the future. They're here for backwards-compatibility.
 			// Use the above before/after event callbacks instead.
-			onTagAdded:                 null,
-			onTagRemoved:               null,
+			onTagAdded:					null,
+			onTagRemoved:				null,
 			// `autocomplete.source` is the replacement for tagSource.
-			tagSource:                  null
+			tagSource:					null
 			// Do not use the above deprecated options.
 		},
 
@@ -225,7 +225,15 @@
 			if (!addedExistingFromSingleFieldNode) {
 				this.tagList.children(this.options.childSelector).each(function() {
 					if (!$(this).hasClass('tagit-new')) {
-						that.createTag($(this).text(), $(this).attr('class'), true);
+						var tag = that.createTag($(this).text(), $(this).attr('class'), true);
+
+						if (tag) {
+							var attributes = $(this).prop('attributes');
+							$.each(attributes, function() {
+								tag.attr(this.name, this.value);
+							});
+						}
+
 						$(this).remove();
 					}
 				});
@@ -546,6 +554,8 @@
 			if (this.options.showAutocompleteOnFocus && !duringInitialization) {
 				setTimeout(function () { that._showAutocomplete(); }, 0);
 			}
+
+			return tag;
 		},
 
 		removeTag: function(tag, animate) {
